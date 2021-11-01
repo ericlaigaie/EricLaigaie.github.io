@@ -1,0 +1,25 @@
+---
+title: "index"
+author: "Eric Laigaie"
+date: "11/1/2021"
+output: html_document
+---
+
+# Personal Information
+
+### Name
+Eric Laigaie
+
+### Location
+Prosper, TX
+
+### Education
+B.A. Economics - University of Texas at Austin - 2021
+Certificates in Computing and Statistical Modeling
+
+M.S. Data Science - Southern Methodist University - 2023
+
+### Work Experience
+Predictive Analysis Intern - Shellpoint Mortgage Servicing
+Summer 2021
+
