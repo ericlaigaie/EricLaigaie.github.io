@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Eric Laigaie &amp; Alex Lopez" />
+
+
+<title>Case Study - 01</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Case-Study-01.html">Case Study 01</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Case Study - 01</h1>
+<h4 class="author">Eric Laigaie &amp; Alex Lopez</h4>
+<h4 class="date">10/5/2021</h4>
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction:</h1>
+<p>In this presentation, we will be visualizing and interpreting the characteristics of beers and the breweries that make them. Key variables that will be considered for inference include beer alcohol content (ABV), international bitterness units (IBU), and brewery locations. The goal of this presentation is to provide feedback and responses to the questions you have proposed. We plan to do this by sharing key insights gathered through our analysis but without the statistical jargon. At the end of the presentation, we plan to share additional insight that was not requested but is imperative to Budweiser if the company plans to produce new beers in the near future.</p>
+<div id="package-load-in" class="section level3">
+<h3>Package Load-In</h3>
+</div>
+<div id="beers-and-breweries-.csv-load-in" class="section level3">
+<h3>Beers and Breweries .csv Load-In</h3>
+<pre class="r"><code># Load in Both Beers and Breweries datasets.
+beers &lt;- read_csv(url(&quot;https://raw.githubusercontent.com/ericlaigaie/Case-Study-01/main/Beers.csv?token=AL7L5SUDXIN5C6OJ62LPMELBLTXMC&quot;))</code></pre>
+<pre><code>## Rows: 2410 Columns: 7</code></pre>
+<pre><code>## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## chr (2): Name, Style
+## dbl (5): Beer_ID, ABV, IBU, Brewery_id, Ounces</code></pre>
+<pre><code>## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>breweries &lt;- read_csv(url(&quot;https://raw.githubusercontent.com/ericlaigaie/Case-Study-01/main/Breweries.csv?token=AL7L5SSPZ7B6NQBXJIMILGDBLTXOM&quot;))</code></pre>
+<pre><code>## Rows: 558 Columns: 4</code></pre>
+<pre><code>## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## chr (3): Name, City, State
+## dbl (1): Brew_ID</code></pre>
+<pre><code>## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div id="how-many-breweries-are-present-in-each-state" class="section level2">
+<h2>1. How many breweries are present in each state?</h2>
+<pre class="r"><code># Brewery Bar Chart
+breweries %&gt;%
+  group_by(State) %&gt;%
+  summarize(n = n()) %&gt;%
+  ggplot(aes(x=n, y=reorder(State, n))) + 
+  geom_bar(stat=&#39;identity&#39;, fill=&#39;darkseagreen4&#39;) + 
+  labs(x=&#39;State&#39;, y=&#39;Number of Breweries&#39;, title=&#39;Number of Breweries by State&#39;) + 
+  theme_minimal()</code></pre>
+<p><img src="Case_Study_01_files/figure-html/State%20n-1.png" width="672" /></p>
+<pre class="r"><code># Load in State Brewery Counts (This changes State name from &quot;AL&quot; -&gt; &quot;alabama&quot;)
+states &lt;- read_csv(url(&quot;https://raw.githubusercontent.com/ericlaigaie/Case-Study-01/main/state_brewery_counts.csv&quot;))</code></pre>
+<pre><code>## Rows: 51 Columns: 2</code></pre>
+<pre><code>## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## chr (1): State
+## dbl (1): n</code></pre>
+<pre><code>## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code># Import geojson for state polygons
+data(continental_us_states)
+
+# Designate region &amp; value
+states$region &lt;- tolower(states$State)
+states$value &lt;- states$n
+
+# Create Choropleth
+state_choropleth(states, 
+                 num_colors=9,
+                 zoom = continental_us_states) +
+  scale_fill_brewer(palette=&quot;Greens&quot;) +
+  labs(title = &quot;Breweries by State&quot;,
+       fill = &quot;n&quot;) +
+  guides(fill=guide_legend(title=&quot;N&quot;))</code></pre>
+<pre><code>## Scale for &#39;fill&#39; is already present. Adding another scale for &#39;fill&#39;, which
+## will replace the existing scale.</code></pre>
+<p><img src="Case_Study_01_files/figure-html/State%20n-2.png" width="672" /> Brewery count varies from state to state. Colorado, California, and Michigan lead the way with over 30 breweries while the bottom 33 states have less than 10 each. In an effort to find geographic patterns, a map was produced. After observation, no solid conclusion was made. One hypothesis is that coastline could increase the number of breweries, as both coasts, Texas, and the Great Lakes region holds the majority of breweries.</p>
+</div>
+<div id="merge-beer-data-with-the-breweries-data.-print-the-first-6-observations-and-the-last-six-observations-to-check-the-merged-file.-rmd-only-this-does-not-need-to-be-included-in-the-presentation-or-the-deck." class="section level2">
+<h2>2. Merge beer data with the breweries data. Print the first 6 observations and the last six observations to check the merged file. (RMD only, this does not need to be included in the presentation or the deck.)</h2>
+<pre class="r"><code># Merge beers and breweries
+breweries &lt;- breweries %&gt;% rename(Brewery_id=Brew_ID)
+df &lt;- merge(breweries, beers, by=&#39;Brewery_id&#39;)
+
+df &lt;- df %&gt;% rename(Brewery = Name.x, Beer = Name.y)
+
+# Print top &amp; bottom 6
+head(df, 6)</code></pre>
+<pre><code>##   Brewery_id           Brewery        City State          Beer Beer_ID   ABV
+## 1          1 NorthGate Brewing Minneapolis    MN       Pumpion    2689 0.060
+## 2          1 NorthGate Brewing Minneapolis    MN    Stronghold    2688 0.060
+## 3          1 NorthGate Brewing Minneapolis    MN   Parapet ESB    2687 0.056
+## 4          1 NorthGate Brewing Minneapolis    MN  Get Together    2692 0.045
+## 5          1 NorthGate Brewing Minneapolis    MN Maggie&#39;s Leap    2691 0.049
+## 6          1 NorthGate Brewing Minneapolis    MN    Wall&#39;s End    2690 0.048
+##   IBU                               Style Ounces
+## 1  38                         Pumpkin Ale     16
+## 2  25                     American Porter     16
+## 3  47 Extra Special / Strong Bitter (ESB)     16
+## 4  50                        American IPA     16
+## 5  26                  Milk / Sweet Stout     16
+## 6  19                   English Brown Ale     16</code></pre>
+<pre class="r"><code>tail(df, 6)</code></pre>
+<pre><code>##      Brewery_id                       Brewery          City State
+## 2405        556         Ukiah Brewing Company         Ukiah    CA
+## 2406        557       Butternuts Beer and Ale Garrattsville    NY
+## 2407        557       Butternuts Beer and Ale Garrattsville    NY
+## 2408        557       Butternuts Beer and Ale Garrattsville    NY
+## 2409        557       Butternuts Beer and Ale Garrattsville    NY
+## 2410        558 Sleeping Lady Brewing Company     Anchorage    AK
+##                           Beer Beer_ID   ABV IBU                   Style Ounces
+## 2405             Pilsner Ukiah      98 0.055  NA         German Pilsener     12
+## 2406         Porkslap Pale Ale      49 0.043  NA American Pale Ale (APA)     12
+## 2407           Snapperhead IPA      51 0.068  NA            American IPA     12
+## 2408         Moo Thunder Stout      50 0.049  NA      Milk / Sweet Stout     12
+## 2409  Heinnieweisse Weissebier      52 0.049  NA              Hefeweizen     12
+## 2410 Urban Wilderness Pale Ale      30 0.049  NA        English Pale Ale     12</code></pre>
+<p>After merging the datasets, we are left with a larger dataframe that not only holds information on each brewery, but the individuals beers inside of them.</p>
+</div>
+<div id="address-the-missing-values-in-each-column." class="section level2">
+<h2>3. Address the missing values in each column.</h2>
+<pre class="r"><code># METHOD 3 - MEAN IMPUTATION BY STYLE GROUP
+
+# Remove missing Styles
+df &lt;- df %&gt;% filter(is.na(Style) == FALSE)
+
+# Function takes in df and imputes mean ABV and IBU. Also creates Style_Group column
+imputer &lt;- function(mydf, myText) {
+  temp &lt;- {{mydf}}
+  for(i in 7:8){
+    temp[is.na(temp[,i]), i] &lt;- mean(temp[,i], na.rm = TRUE)
+  }
+  temp$Style_Group &lt;- {{myText}}
+  output &lt;- temp
+}
+
+# Creating new dfs for each style group
+ale &lt;- df %&gt;% filter(grepl(&#39;Ale&#39;, df$Style) == TRUE) %&gt;% filter(Style != &#39;English India Pale Ale (IPA)&#39;)
+ipa &lt;- df %&gt;% filter(grepl(&#39;IPA&#39;, df$Style) == TRUE)
+lager &lt;- df %&gt;% filter(grepl(&#39;Lager&#39;, df$Style) == TRUE)
+stout &lt;- df %&gt;% filter(grepl(&#39;Stout&#39;, df$Style) == TRUE)
+other &lt;- df %&gt;% filter(grepl(&#39;Stout&#39;, df$Style) == FALSE &amp;
+                grepl(&#39;Lager&#39;, df$Style) == FALSE &amp;
+                grepl(&#39;IPA&#39;, df$Style) == FALSE &amp;
+                grepl(&#39;IPA&#39;, df$Style) == FALSE &amp;
+                grepl(&#39;Ale&#39;, df$Style) == FALSE)
+
+# Imputing mean ABV / IBU
+ale &lt;- imputer(ale, &#39;Ale&#39;)
+ipa &lt;- imputer(ipa, &#39;IPA&#39;)
+lager &lt;- imputer(lager, &#39;Lager&#39;)
+stout &lt;- imputer(stout, &#39;Stout&#39;)
+other &lt;- imputer(other, &#39;Other&#39;)
+
+# Combine back into df
+df &lt;- rbind(ale, ipa, lager, stout, other)
+df$Style_Group &lt;- as.factor(df$Style_Group)</code></pre>
+<p>Because missing values are found in over 40% of the IBU column, it was important to avoid removing them outright. Therefore, the dataset was split into 5 groups based on beer style (Ale, IPA, Lager, Stout, and Other). Then, the missing values in each group were imputed with the group mean of that variable. Additionally, 5 missing Styles were found. Since this missing data is a small part of the full dataframe, these rows with missing values were removed.</p>
+</div>
+<div id="compute-the-median-alcohol-content-and-international-bitterness-unit-for-each-state.-plot-a-bar-chart-to-compare." class="section level2">
+<h2>4. Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.</h2>
+<pre class="r"><code># Median ABV bar chart
+df %&gt;% group_by(State) %&gt;% 
+  summarise(med_abv = median(ABV)) %&gt;%
+  ggplot(aes(y=reorder(State, med_abv), x=med_abv)) + 
+  geom_bar(stat=&#39;identity&#39;, fill=&#39;darkseagreen4&#39;) +
+  labs(x=&#39;Median ABV&#39;, y=&#39;State&#39;, title=&#39;Median ABV by State&#39;)</code></pre>
+<p><img src="Case_Study_01_files/figure-html/med_abv-1.png" width="672" /></p>
+<pre class="r"><code># Median IBU bar chart
+df %&gt;% group_by(State) %&gt;%
+  summarise(med_ibu = median(IBU)) %&gt;%
+  ggplot(aes(y=reorder(State, med_ibu), x=med_ibu)) + 
+  geom_bar(stat=&#39;identity&#39;, fill=&#39;darkseagreen4&#39;) +
+  labs(x=&#39;Median IBU&#39;, y=&#39;State&#39;, title=&#39;Median IBU by State&#39;)</code></pre>
+<p><img src="Case_Study_01_files/figure-html/med_abv-2.png" width="672" /> Both the median ABV and IBU charts do not show a lot of variation between states. 44/51 states have a median ABV between .05 and .06, and 40/51 states a median IBU between 30 and 50. Additionally, 25 states have an almost identical median IBU. This is most likely a product of these states having many missing IBU values that were imputed manually.</p>
+</div>
+<div id="which-state-has-the-maximum-alcoholic-abv-beer-which-state-has-the-most-bitter-ibu-beer" class="section level2">
+<h2>5. Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?</h2>
+<pre class="r"><code># Find max ABV &amp; IBU
+max_ABV = max(df$ABV)
+max_IBU = max(df$IBU)
+df %&gt;% filter(ABV == max_ABV)</code></pre>
+<pre><code>##   Brewery_id                 Brewery    City State
+## 1         52 Upslope Brewing Company Boulder    CO
+##                                                   Beer Beer_ID   ABV      IBU
+## 1 Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale    2565 0.128 26.55937
+##              Style Ounces Style_Group
+## 1 Quadrupel (Quad)   19.2       Other</code></pre>
+<pre class="r"><code>df %&gt;% filter(IBU == max_IBU)</code></pre>
+<pre><code>##   Brewery_id                 Brewery    City State                      Beer
+## 1        375 Astoria Brewing Company Astoria    OR Bitter Bitch Imperial IPA
+##   Beer_ID   ABV IBU                          Style Ounces Style_Group
+## 1     980 0.082 138 American Double / Imperial IPA     12         IPA</code></pre>
+<pre class="r"><code>ABV_diff &lt;- (max_ABV - mean(df$ABV)) / sd(df$ABV)
+IBU_diff &lt;- (max_IBU - mean(df$IBU)) / sd(df$IBU)
+
+#ABV_diff ---&gt; 5.09
+#IBU_diff ---&gt; 4.30</code></pre>
+<p>The max ABV is .128 (12.8%), which is 5.09 standard deviations above the mean of .06. The max IBU is 138, which is 4.30 standard deviations above the mean of 40.97.</p>
+</div>
+<div id="comment-on-the-summary-statistics-and-distribution-of-the-abv-variable." class="section level2">
+<h2>6. Comment on the summary statistics and distribution of the ABV variable.</h2>
+<pre class="r"><code># Quick summary of ABV - full dataset
+summary(df$ABV)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## 0.00100 0.05000 0.05681 0.05977 0.06700 0.12800</code></pre>
+<pre class="r"><code>sd(df$ABV)</code></pre>
+<pre><code>## [1] 0.01340808</code></pre>
+<pre class="r"><code># Make 4 charts
+box_all &lt;- ggplot(df, aes(x=ABV)) + geom_boxplot(fill=&#39;darkseagreen4&#39;) + 
+  labs(x=&#39;ABV&#39;, title=&#39;ABV Boxplot&#39;)
+hist_all &lt;- ggplot(df, aes(x=ABV)) + geom_histogram(binwidth = .005, color=&#39;black&#39;, fill=&#39;darkseagreen4&#39;) +
+  labs(x=&#39;ABV&#39;, title=&#39;ABV Histogram&#39;)
+
+# Arrange 4 charts
+ggarrange(box_all, hist_all, nrow=2, ncol=1)</code></pre>
+<p><img src="Case_Study_01_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code># Check for normality
+shapiro.test(df$ABV)</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  df$ABV
+## W = 0.93708, p-value &lt; 2.2e-16</code></pre>
+<pre class="r"><code>qqnorm(df$ABV, col=&#39;darkseagreen4&#39;, lwd=2)</code></pre>
+<p><img src="Case_Study_01_files/figure-html/unnamed-chunk-5-2.png" width="672" /> Using both graphical and statistical methods, we concluded that the ABV distribution is skewed right. While there is a large numbers of beers centered around the mean of .06, there is a tail of more alcoholic beers towards the higher ABV side.</p>
+</div>
+<div id="is-there-an-apparent-relationship-between-the-bitterness-of-the-beer-and-its-alcoholic-content-draw-a-scatter-plot.-make-your-best-judgment-of-a-relationship-and-explain-your-answer." class="section level2">
+<h2>7. Is there an apparent relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot. Make your best judgment of a relationship and EXPLAIN your answer.</h2>
+<pre class="r"><code># Find correlation of IBU and ABV in df
+cor_IBUABV = round(cor(df$IBU, df$ABV), 3)
+
+# Make R label
+label_x = paste(c(&quot;R =&quot;, cor_IBUABV), collapse = &quot; &quot;)
+
+# IBU and ABV scatterplot (with R label)
+ggplot(df, aes(x=IBU, ABV)) + 
+  geom_point(size=2, color=&#39;darkseagreen3&#39;) + 
+  geom_smooth(method=&#39;lm&#39;, color=&#39;darkseagreen4&#39;) +
+  labs(x=&#39;International Bittering Units (IBU)&#39;, y=&#39;Alcohol by Volume (ABV)&#39;, title=&#39;IBU vs ABV&#39;) +
+  geom_label(label=label_x, x=100, y=.025,label.padding = unit(0.55, &quot;lines&quot;), label.size = 0.35, color = &quot;black&quot;, fill=&quot;#69b3a2&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="Case_Study_01_files/figure-html/unnamed-chunk-6-1.png" width="672" /> There is a moderate positive correlation between ABV and IBU (R = .0557). As either variable increases/decreases, we can moderately expect the other to move in the same direction.</p>
+</div>
+<div id="budweiser-would-also-like-to-investigate-the-difference-with-respect-to-ibu-and-abv-between-ipas-india-pale-ales-and-other-types-of-ale-any-beer-with-ale-in-its-name-other-than-ipa.-you-decide-to-use-knn-classification-to-investigate-this-relationship.-provide-statistical-evidence-one-way-or-the-other.-you-can-of-course-assume-your-audience-is-comfortable-with-percentages-knn-is-very-easy-to-understand-conceptually." class="section level2">
+<h2>8. Budweiser would also like to investigate the difference with respect to IBU and ABV between IPAs (India Pale Ales) and other types of Ale (any beer with “Ale” in its name other than IPA). You decide to use KNN classification to investigate this relationship. Provide statistical evidence one way or the other. You can of course assume your audience is comfortable with percentages … KNN is very easy to understand conceptually.</h2>
+<pre class="r"><code># Create new data frame with only Ale and IPA Beers
+# Next, create dummy variable for Ale vs IPA
+
+df_ale = df %&gt;% filter(grepl(&quot;Ale&quot;, df$Style) == TRUE) %&gt;% filter(Style != &#39;English India Pale Ale (IPA)&#39;)
+df_IPA = df %&gt;% filter(grepl(&quot;IPA&quot;, df$Style) == TRUE)
+
+df_IPA$ale_IPA = &#39;IPA&#39;
+df_ale$ale_IPA = &#39;Ale&#39;
+
+new_df = rbind(df_ale,df_IPA)
+
+new_df$ale_IPA = as.factor(new_df$ale_IPA)
+
+new_df &lt;- df %&gt;% filter(Style_Group %in% c(&#39;Ale&#39;, &#39;IPA&#39;))
+
+# Perform KNN model using ABV and IBU
+# Hyper-tune to be completed on K value
+
+# First, standardize IBU and ABV values
+
+new_df$zABV = as.numeric(scale(new_df$ABV))
+new_df$zIBU = as.numeric(scale(new_df$IBU))
+
+# Loop to find best value for K with 70/30 train-test split
+
+iterations = 100
+numks = 100
+splitPerc = .70
+
+masterAcc = matrix(nrow = iterations, ncol = numks)
+masterSen = matrix(nrow = iterations, ncol = numks)
+masterSpe = matrix(nrow = iterations, ncol = numks)
+
+for(j in 1:iterations)
+{
+  trainIndices = sample(1:dim(new_df)[1],round(splitPerc * dim(new_df)[1]))
+  train = new_df[trainIndices,]
+  test = new_df[-trainIndices,]
+  for(i in 1:numks)
+  {
+    classifications = knn(train[,c(7,8)],test[,c(7,8)],train$Style_Group, prob = TRUE, k = i)
+    table(classifications,test$Style_Group)
+    CM = confusionMatrix(table(classifications,test$Style_Group))
+    masterAcc[j,i] = CM$overall[1]
+    masterSen[j,i] = CM$byClass[1]
+    masterSpe[j,i] = CM$byClass[2]
+  }
+  
+}
+
+MeanAcc = colMeans(masterAcc)
+MeanSen = colMeans(masterSen)
+MeanSpe = colMeans(masterSpe)
+
+plot(seq(1,numks,1),MeanAcc, type = &quot;l&quot;)</code></pre>
+<p><img src="Case_Study_01_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>which.max(MeanAcc)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>max(MeanAcc)</code></pre>
+<pre><code>## [1] 0.9114783</code></pre>
+<pre class="r"><code>plot(seq(1,numks,1),MeanSen, type = &quot;l&quot;)</code></pre>
+<p><img src="Case_Study_01_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<pre class="r"><code>which.max(MeanSen)</code></pre>
+<pre><code>## [1] 13</code></pre>
+<pre class="r"><code>max(MeanSen)</code></pre>
+<pre><code>## [1] 0.9485251</code></pre>
+<pre class="r"><code>plot(seq(1,numks,1),MeanSpe, type = &quot;l&quot;)</code></pre>
+<p><img src="Case_Study_01_files/figure-html/unnamed-chunk-7-3.png" width="672" /></p>
+<pre class="r"><code>which.max(MeanSpe)</code></pre>
+<pre><code>## [1] 97</code></pre>
+<pre class="r"><code>max(MeanSpe)</code></pre>
+<pre><code>## [1] 0.8824015</code></pre>
+<pre class="r"><code># K = 6 gives highest accuracy (81%)
+# K = 10 gives highest sensitivity (87%)
+# K = 62 gives highest specificity (73%)
+
+# Run KNN model with K=6 for highest accuracy (per hyper tuning)
+classifications = knn(train[,c(7,8)],test[,c(7,8)],train$Style_Group,prob = TRUE, k = 5)
+confusionMatrix(table(classifications,test$Style_Group))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##                
+## classifications Ale IPA Lager Other Stout
+##           Ale   272  12     0     0     0
+##           IPA    20 156     0     0     0
+##           Lager   0   0     0     0     0
+##           Other   0   0     0     0     0
+##           Stout   0   0     0     0     0
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.9304          
+##                  95% CI : (0.9032, 0.9519)
+##     No Information Rate : 0.6348          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.8515          
+##                                           
+##  Mcnemar&#39;s Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: Ale Class: IPA Class: Lager Class: Other
+## Sensitivity              0.9315     0.9286           NA           NA
+## Specificity              0.9286     0.9315            1            1
+## Pos Pred Value           0.9577     0.8864           NA           NA
+## Neg Pred Value           0.8864     0.9577           NA           NA
+## Prevalence               0.6348     0.3652            0            0
+## Detection Rate           0.5913     0.3391            0            0
+## Detection Prevalence     0.6174     0.3826            0            0
+## Balanced Accuracy        0.9300     0.9300           NA           NA
+##                      Class: Stout
+## Sensitivity                    NA
+## Specificity                     1
+## Pos Pred Value                 NA
+## Neg Pred Value                 NA
+## Prevalence                      0
+## Detection Rate                  0
+## Detection Prevalence            0
+## Balanced Accuracy              NA</code></pre>
+<p>A KNN model using k=5 was found to produce the highest average accuracy at 91.3%. Therefore, an optimized KNN model could accurately predict &gt;90% of beers as Ales or IPAs based solely on their ABV and IBU. This tells us that ABV and IBU is homogenous within the Ale or IPA style or sub-styles. Basically, if a beer with X ABV and Y IBU is an Ale, it is likely that the majority of the most similar beers are Ales as well.</p>
+</div>
+<div id="additional-modeling" class="section level2">
+<h2>8.5: Additional Modeling</h2>
+<p>In addition, while you have decided to use KNN to investigate this relationship (KNN is required) you may also feel free to supplement your response to this question with any other methods or techniques you have learned. Creativity and alternative solutions are always encouraged.</p>
+<pre class="r"><code># Using Naive-Bayes to investigate relationship
+
+# Set seed and create Train/Test Split 
+set.seed(10)
+trainIndices = sample(seq(1:length(new_df$Beer_ID)),round(.7*length(new_df$Beer_ID)))
+train_nb = new_df[trainIndices,]
+test_nb = new_df[-trainIndices,]
+
+# Create model and print confusion matrix
+model = naiveBayes(train_nb[,c(7,8)],train_nb$Style_Group,laplace = 1)
+table(predict(model,test_nb[,c(7,8)]),test_nb$Style_Group)</code></pre>
+<pre><code>##        
+##         Ale IPA Lager Other Stout
+##   Ale   269  22     0     0     0
+##   IPA    20 149     0     0     0
+##   Lager   0   0     0     0     0
+##   Other   0   0     0     0     0
+##   Stout   0   0     0     0     0</code></pre>
+<pre class="r"><code>CM = confusionMatrix(table(predict(model,test_nb[,c(7,8)]),test_nb$Style_Group))
+CM</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##        
+##         Ale IPA Lager Other Stout
+##   Ale   269  22     0     0     0
+##   IPA    20 149     0     0     0
+##   Lager   0   0     0     0     0
+##   Other   0   0     0     0     0
+##   Stout   0   0     0     0     0
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.9087          
+##                  95% CI : (0.8786, 0.9334)
+##     No Information Rate : 0.6283          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.8041          
+##                                           
+##  Mcnemar&#39;s Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: Ale Class: IPA Class: Lager Class: Other
+## Sensitivity              0.9308     0.8713           NA           NA
+## Specificity              0.8713     0.9308            1            1
+## Pos Pred Value           0.9244     0.8817           NA           NA
+## Neg Pred Value           0.8817     0.9244           NA           NA
+## Prevalence               0.6283     0.3717            0            0
+## Detection Rate           0.5848     0.3239            0            0
+## Detection Prevalence     0.6326     0.3674            0            0
+## Balanced Accuracy        0.9011     0.9011           NA           NA
+##                      Class: Stout
+## Sensitivity                    NA
+## Specificity                     1
+## Pos Pred Value                 NA
+## Neg Pred Value                 NA
+## Prevalence                      0
+## Detection Rate                  0
+## Detection Prevalence            0
+## Balanced Accuracy              NA</code></pre>
+<p>A Naive-Bayes model has similar results to our optimized KNN. This model has a &gt;90% accuracy rate, meaning that it can predict correctly if a beer is an Ale or IPA with only the ABV and IBU (and some probability calculations).</p>
+</div>
+<div id="knock-their-socks-off-find-one-other-useful-inference-from-the-data-that-you-feel-budweiser-may-be-able-to-find-value-in.-you-must-convince-them-why-it-is-important-and-back-up-your-conviction-with-appropriate-statistical-evidence." class="section level2">
+<h2>9. Knock their socks off! Find one other useful inference from the data that you feel Budweiser may be able to find value in. You must convince them why it is important and back up your conviction with appropriate statistical evidence.</h2>
+<div id="load-in-regions-data-and-visualize." class="section level3">
+<h3>Load in Regions data and visualize.</h3>
+<pre class="r"><code># Load in regions data
+regions = read_csv(url(&#39;https://raw.githubusercontent.com/ericlaigaie/Case-Study-01/main/regions_v2.csv&#39;))</code></pre>
+<pre><code>## Rows: 51 Columns: 3</code></pre>
+<pre><code>## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## chr (3): State, Region, State Abbreviation</code></pre>
+<pre><code>## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code># remove State Column and rename abbreviations to &#39;State&#39; to merge
+regions = subset(regions, select = -c(State))
+names(regions)[2] = &#39;State&#39;
+df = merge(df,regions,&quot;State&quot;)
+
+# Prep data for choropleth
+df$Region &lt;- as.factor(df$Region)
+regions &lt;- regions %&gt;% arrange(State)
+
+# Designate region &amp; value
+choro_df &lt;- data.frame(&#39;region&#39; = states$State, &#39;value&#39; = regions$Region)
+
+# Create Choropleth
+state_choropleth(choro_df, 
+                 num_colors=7,
+                 zoom = continental_us_states) +
+  scale_fill_brewer(palette=&quot;Set1&quot;) +
+  labs(title = &quot;Regions&quot;,
+       fill = &quot;n&quot;) +
+  guides(fill=guide_legend(title=&quot;Region&quot;))</code></pre>
+<pre><code>## Scale for &#39;fill&#39; is already present. Adding another scale for &#39;fill&#39;, which
+## will replace the existing scale.</code></pre>
+<p><img src="Case_Study_01_files/figure-html/unnamed-chunk-9-1.png" width="672" /> This is a map of our regions. The next code cell will use statistical tests to examine how ABV and IBU distributions differ between regions.</p>
+</div>
+<div id="checking-assumptions-of-anova" class="section level3">
+<h3>Checking Assumptions of ANOVA</h3>
+<pre class="r"><code># ABV
+ggplot(df, aes(x=ABV, y=Region)) + geom_boxplot()</code></pre>
+<p><img src="Case_Study_01_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(df, aes(x=ABV)) + geom_histogram() + facet_wrap(~Region)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="Case_Study_01_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<pre class="r"><code># IBU
+ggplot(df, aes(x=IBU, y=Region)) + geom_boxplot()</code></pre>
+<p><img src="Case_Study_01_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
+<pre class="r"><code>ggplot(df, aes(x=IBU)) + geom_histogram() + facet_wrap(~Region)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="Case_Study_01_files/figure-html/unnamed-chunk-10-4.png" width="672" /></p>
+<pre class="r"><code># We are assuming independence both with-in and between groups.</code></pre>
+<p>ABV: While regions have similar variances, I can’t say that they are normally distributed. Although the CLT may allows us to bypass this assumption, I will stick with a non-parametric test to be safe.</p>
+<p>IBU: There is overwhelming evidence that the distributions are not normal and that regions do not have similar variance. Because of this, a non-parametric test is required.</p>
+</div>
+<div id="kruskal-wallis-test" class="section level3">
+<h3>Kruskal Wallis Test</h3>
+<pre class="r"><code>kruskal.test(ABV~Region, df)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  ABV by Region
+## Kruskal-Wallis chi-squared = 24.969, df = 6, p-value = 0.000346</code></pre>
+<pre class="r"><code># P-value &lt; .05, so we say that there is evidence to suggest that at least one of the Region median ABVs is significantly different from the others.
+
+kruskal.test(IBU~Region, df)</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  IBU by Region
+## Kruskal-Wallis chi-squared = 11.366, df = 6, p-value = 0.07772</code></pre>
+<pre class="r"><code># P-value &gt; .05, so we say that there is not enough evidence to suggest that there is a difference in Region-specific ABV medians.</code></pre>
+<p>The Kruskal-Wallis test provides sufficient evidence to suggest that at least one region has a mean ABV that differs significantly from the others. Further testing down below (P-value = .00035).</p>
+<p>The Kruskal-Wallis test suggests that there is not enough evidence to say that any region’s mean IBU differs significantly from any others. No further testing needed (P-value = .0778).</p>
+</div>
+<div id="to-find-which-exact-regions-have-differing-median-abvs-we-will-use-rank-sum-tests.-the-function-below-calculates-all-combinations-of-the-regions-in-our-df-and-tests-them-using-wilcox.test." class="section level3">
+<h3>To find which exact regions have differing median ABVs, we will use Rank Sum Tests. The function below calculates all combinations of the regions in our df and tests them using wilcox.test.</h3>
+<pre class="r"><code>regions &lt;- unique(as.character(df$Region))
+# Pull regions into a list
+
+wilcoxon_tester &lt;- function(myVar) {
+  region_x &lt;- character()
+  region_y &lt;- character()
+  p_value &lt;- numeric()
+  
+  for (i in 1:length(regions)) {
+    
+    for (j in 1:length(regions)) {
+      
+      if (j != i) {
+        j_df &lt;- df %&gt;% filter(Region == regions[j]) %&gt;% pull({{myVar}})
+        i_df &lt;- df %&gt;% filter(Region == regions[i]) %&gt;% pull({{myVar}})
+        test &lt;- wilcox.test(x=j_df, y=i_df, alternative=&#39;two.sided&#39;)
+        
+        if (test$p.value &lt; .05) {
+          region_x &lt;- append(region_x, regions[i])
+          region_y &lt;- append(region_y, regions[j])
+          p_value &lt;- append(p_value, round(test$p.value, 4))
+        }
+      }
+    }
+  }
+  wilcox_results &lt;- data.frame(&#39;Region_x&#39;=region_x, &#39;Region_y&#39;=region_y, &#39;P_value&#39;=p_value)
+}
+
+# Testing....will print out all tests that are significant.
+wilcox_results &lt;- wilcoxon_tester(ABV)
+
+# Filters out all even rows (each test result is duplicated)
+wilcox_results &lt;- wilcox_results %&gt;% arrange(P_value)
+wilcox_results$odd &lt;- seq_len(nrow(wilcox_results)) %% 2
+
+wilcox_results %&gt;% arrange(Region_x) %&gt;% filter(odd == 1)</code></pre>
+<pre><code>##      Region_x    Region_y P_value odd
+## 1    Atlantic Great Lakes  0.0409   1
+## 2     Midwest Great Lakes  0.0024   1
+## 3    Mountain New England  0.0004   1
+## 4    Mountain     Midwest  0.0055   1
+## 5 New England Great Lakes  0.0001   1
+## 6 New England    Atlantic  0.0310   1
+## 7     Pacific Great Lakes  0.0144   1
+## 8     Pacific    Mountain  0.0259   1</code></pre>
+<p>The Rank Sum Tests above tell us that 8 out of the 21 region combinations have significantly different mean ABVs. Displayed along the two regions is the p-value from the associated test.</p>
+<p>Interesting Notes: A. The ‘South’ region does not appear. Therefore, it is similar to all other regions. B. The ‘Great Lakes’ region appears 4 times, making it the most unique region.</p>
+</div>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion:</h1>
+<p>In conclusion, we found that the breweries in the US are mostly located in high density states like Texas and California. We saw that the median beer ABV does not vary that much between states, and the ABV distribution shows a tail of more alcoholic beers towards the higher end of the ABV spectrum. This observation is consistent with the idea that craft beers are becoming more and more popular in the US. We also saw a moderate positive correlation between ABV and IBU. Our hypothesis is that this correlation exists because adding hops, a key ingredient in most beers, will make a beer more alcoholic and more bitter. Although the craft beer trend is rising, Budweiser would likely benefit from a lower ABV beer, possibly because most people do not enjoy the bitterness. To further analyze the correlation between ABV and IBU, particularly in Ales vs IPA’s, we ran the data through a KNN model. The model came to show that, given a beer’s ABV and IBU, we could predict whether that beer was an Ale or IPA with an accuracy of over 91%! We also had very similar accuracy results when using a Naïve-Bayes model. In both cases, the models showed that ABV and IBU do not significantly vary in beer styles. Finally, our statistical tests (Kruskal-Wallis &amp; Rank Sum) highlights which regions had significantly different mean ABVs or IBUs. Using the feedback from these tests, Budweiser can consider how the ABV of a new product would fit into each region’s existing range of beers.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
